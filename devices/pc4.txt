@@ -1,0 +1,84 @@
+0  pc4_1  null      
+1  pc4_1  recive  1   
+2  pc4_1  recive  1   
+3  pc4_1  recive  1   
+4  pc4_1  send  1  ok
+5  pc4_1  send  1  ok
+6  pc4_1  send  1  ok
+7  pc4_1  send  1  ok
+8  pc4_1  send  1  ok
+9  pc4_1  send  1  ok
+10  pc4_1  send  1  ok
+11  pc4_1  send  1  ok
+12  pc4_1  send  1  ok
+13  pc4_1  send  1  ok
+14  pc4_1  send  1  collision
+15  pc4_1  send  1  collision
+16  pc4_1  send  1  collision
+17  pc4_1  send  1  collision
+18  pc4_1  send  1  collision
+19  pc4_1  send  1  collision
+20  pc4_1  send  1  collision
+21  pc4_1  send  1  collision
+22  pc4_1  send  1  collision
+23  pc4_1  send  1  collision
+24  pc4_1  send  1  ok
+25  pc4_1  send  1  ok
+26  pc4_1  send  1  ok
+27  pc4_1  send  1  ok
+28  pc4_1  send  1  ok
+29  pc4_1  send  1  ok
+30  pc4_1  send  1  ok
+31  pc4_1  send  1  ok
+32  pc4_1  send  1  ok
+33  pc4_1  send  1  ok
+34  pc4_1  send  0  collision
+35  pc4_1  send  0  collision
+36  pc4_1  send  0  collision
+37  pc4_1  send  0  collision
+38  pc4_1  send  0  collision
+39  pc4_1  send  0  collision
+40  pc4_1  send  0  collision
+41  pc4_1  send  0  collision
+42  pc4_1  send  0  collision
+43  pc4_1  send  0  collision
+44  pc4_1  send  0  ok
+45  pc4_1  send  0  ok
+46  pc4_1  send  0  ok
+47  pc4_1  send  0  ok
+48  pc4_1  send  0  ok
+49  pc4_1  send  0  ok
+50  pc4_1  send  0  ok
+51  pc4_1  send  0  ok
+52  pc4_1  send  0  ok
+53  pc4_1  send  0  ok
+54  pc4_1  send  0  collision
+55  pc4_1  send  0  collision
+56  pc4_1  send  0  collision
+57  pc4_1  send  0  collision
+58  pc4_1  send  0  collision
+59  pc4_1  send  0  collision
+60  pc4_1  send  0  collision
+61  pc4_1  send  0  collision
+62  pc4_1  send  0  collision
+63  pc4_1  send  0  collision
+64  pc4_1  send  0  ok
+65  pc4_1  send  0  ok
+66  pc4_1  send  0  ok
+67  pc4_1  send  0  ok
+68  pc4_1  send  0  ok
+69  pc4_1  send  0  ok
+70  pc4_1  send  0  ok
+71  pc4_1  send  0  ok
+72  pc4_1  send  0  ok
+73  pc4_1  send  0  ok
+74  pc4_1  recive  1   
+75  pc4_1  recive  1   
+76  pc4_1  recive  1   
+77  pc4_1  recive  1   
+78  pc4_1  recive  1   
+79  pc4_1  recive  1   
+80  pc4_1  recive  1   
+81  pc4_1  recive  1   
+82  pc4_1  recive  1   
+83  pc4_1  recive  1   
