@@ -169,7 +169,8 @@ def to_sendig():
     return
 
 def to_sending_frame():
-    
+    pass
+
 
 def writetxt(time):
     for device in Devices:
