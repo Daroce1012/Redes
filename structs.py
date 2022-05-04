@@ -27,18 +27,23 @@ class Device: #estructura general que engloba a todos los dispositivos
                         self.ports[i].send(self)
 
 
-class Host(Device):  # estructura host o computer
+class Host(Device):  # estructura host o computer 
     def __init__(self,name):
         super().__init__(name,1)
         self.time_to_send = -1
         self.data_to_send=[]
         self.collision=' '
-
+        self.mac = None
+        self.receive_frame =None #string
 
 class Hub(Device):
     def __init__(self,name,PortsNumber):
         super().__init__(name,PortsNumber)
 
 
-
+class Switch(Device):
+     def __init__(self,name,PortsNumber):
+        super().__init__(name,PortsNumber)
+        self.mac_conect = []
+        
 

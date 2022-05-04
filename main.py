@@ -1,3 +1,4 @@
+from frame import Frame
 import structs
 import os
 import shutil
@@ -7,6 +8,7 @@ host_list=[]
 Devices=[]
 sending = []
 stopsend = []
+stopframe = []
 
 def read_Script(name):
     with open(name,"r") as archivo:
@@ -23,6 +25,8 @@ def parse(string_list):
         disconnect(int(string_list[0]),string_list[2])
     elif (string_list[1] == "send"):
         send(int(string_list[0]), string_list[2], string_list[3])
+    elif (string_list[1] == "mac"):
+        mac(int(string_list[0]), string_list[2])    
 
 
 def create(linea_list):
@@ -40,6 +44,8 @@ def create_host(time,name):
     host_list.append(host_)
     Devices.append(host_)
 
+
+
 def send(time,host,data):
     for i in Devices:
         if(i.name == host):
@@ -48,6 +54,17 @@ def send(time,host,data):
                 stopsend.append(i)
 
     return
+
+def send_frame(host,mac_destino,data):
+    frame = None
+    for i in host_list:
+        if i.name == host:
+            frame = Frame(i,mac_destino,data)
+            break
+    if frame != None:
+        stopframe.append(frame)
+
+
 
 def dfs(device):  #restablece las propiedades de los dispositivos que son alcanzables desde device
     device.value = -1
@@ -59,7 +76,11 @@ def dfs(device):  #restablece las propiedades de los dispositivos que son alcanz
             dfs(device.ports[i])
 
 
-
+def mac (host ,address):
+    for h in host_list:
+        if(h.name == host):
+           h.mac = address
+     
 
 def connect(time,port1,port2):
     port_1=port1.split('_')
@@ -128,9 +149,6 @@ def disconnect(time,port):
 
     return
 
-
-
-
 def to_sendig():
     if len(stopsend)> 0 :
         for i in stopsend:
@@ -150,25 +168,10 @@ def to_sendig():
 
     return
 
+def to_sending_frame():
+    
 
 def writetxt(time):
-    """
-    count=0
-    while(count<len(Devices)):
-        disp=Devices[count]
-        if(isinstance(disp, estructuras.Host)):
-            #name=disp.name
-            archivo=open(f"{disp.name}.txt","w")
-            archivo.write(f"{time} {disp.name}_1 {disp.states} {disp.value} {disp.collision}\n")
-            archivo.close()
-        else:
-            archivo=open(f"{disp.name}.txt", "w")
-            for i in range(0,len(disp.states)):
-                archivo.write(f"{time} {disp.name}_{i} {disp.states[i]} {disp.value}\n")
-            archivo.close()
-        count=count+1
-            
-"""
     for device in Devices:
             s = open('devices/' + device.name + '.txt', 'a+')
             for i in range(len(device.ports)):
@@ -252,4 +255,3 @@ def main():
 
 main()
 
-#hola
