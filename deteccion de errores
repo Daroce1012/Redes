@@ -1,4 +1,3 @@
-
 def Hash(hex_str):
     count=0
     hash_var=0
@@ -10,8 +9,33 @@ def Hash(hex_str):
     return dec_bin
 
 
-def deteccion_errores():
-    return 
+def deteccion_errores(bin_str):
+
+    data=bin_str[32:]
+
+    datos_size=bin_dec(data[0:8])
+    datos_verif_size=bin_dec(data[8:16])
+    
+    pos_final=(datos_size*8)+16
+    datos=data[16:pos_final]
+    datos_verif=data[pos_final:(datos_verif_size*8)+pos_final]
+    hash_datos=Hash(bin_hex_por_partes(datos))
+
+    return bin_dec(hash_datos)==bin_dec(datos_verif)
+
+def bin_hex_por_partes(bin_str):
+
+    count=0
+    bin_hex_var=""
+    while(count<len(bin_str)):
+        actual=bin_str[count:count+8]
+        bin_hex_var=bin_hex_var+bin_hex(actual)
+        count=count+8
+    return bin_hex_var
+
+def bin_hex(exp_bin):
+        hexstr=f'{int(exp_bin,2):X}'
+        return hexstr
 
 def hex_dec(exp_hex):
         return int(exp_hex,16)
@@ -19,7 +43,9 @@ def hex_dec(exp_hex):
 def hex_bin(exp_hex):
         binstr="{0:08b}".format(int(exp_hex,16))
         return binstr
+def bin_dec(exp_bin):
+        return int(exp_bin,2)
 def main():
-    print(Hash("AABBCCDD"))
+    print(deteccion_errores("1011111000010011101001011011010000000011000000100110100111000000011010100000000110010011"))
 
 main()
