@@ -1,0 +1,25 @@
+
+def Hash(hex_str):
+    count=0
+    hash_var=0
+    while(count<len(hex_str)):
+        actual_byte=hex_str[count:count+2]
+        hash_var=hash_var+hex_dec(actual_byte)
+        count=count+2
+    dec_bin=bin(hash_var)[2:]
+    return dec_bin
+
+
+def deteccion_errores():
+    return 
+
+def hex_dec(exp_hex):
+        return int(exp_hex,16)
+
+def hex_bin(exp_hex):
+        binstr="{0:08b}".format(int(exp_hex,16))
+        return binstr
+def main():
+    print(Hash("AABBCCDD"))
+
+main()
