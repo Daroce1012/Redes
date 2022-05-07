@@ -1,7 +1,11 @@
+from pickle import FALSE
+
+
 class Device: #estructura general que engloba a todos los dispositivos
     def __init__(self,name,PortsNumber):
         self.name=name
-        self.states=["null"]*PortsNumber #representa el estado de cada uno de los puertos
+        self.state_send=[False]*PortsNumber #representa el estado de cada uno de los puertos
+        self.state_recive=[False]*PortsNumber
         self.ports=[None]*PortsNumber # representa a cada uno de los puertos
         self.value=-1 #informacion que se esta reciviendo en el canal
         self.value_send = -1

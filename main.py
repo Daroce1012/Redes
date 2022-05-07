@@ -1,6 +1,5 @@
 from asyncio.windows_events import NULL
-from frame import Frame
-from  frame import Hash,bin_hex,bin_dec,hex_bin,hex_dec,bin_hex_por_partes
+from  frame import Frame ,Hash,bin_hex,bin_dec,hex_bin,hex_dec,bin_hex_por_partes
 import structs
 import os
 import shutil
@@ -10,12 +9,11 @@ host_list=[]
 Devices=[]
 sending = []
 stopsend = []
-#stopframe = []
 
 def deteccion_errores(bin_str):
 
     data=bin_str[32:]
-    
+
     datos_size=bin_dec(data[0:8])
     datos_verif_size=bin_dec(data[8:16])
     
@@ -84,31 +82,18 @@ def send_frame(host,mac_destino,data):
     for i in host_list:
         if i.name == host:
             frame = Frame(i,mac_destino,data)
-            send_f = frame.mac_destino + frame.mac_origen + frame.data
+            send_f = frame.mac_destino + frame.mac_origen + frame.size + frame.size_dato_veri + frame.data + frame.dato_veri
             send(host,send_f)
             break
   #  if frame != None:
    #     stopframe.append(frame)
-
-
-
-
-def dfs(device):  #restablece las propiedades de los dispositivos que son alcanzables desde device
-    device.value = -1
-    if isinstance(device, structs.Host):
-        device.collision = ' '
-    for i in range(len(device.ports)):
-        if device.ports[i] != None and device.states[i] != 'null':
-            device.states[i] = 'null'
-            dfs(device.ports[i])
-
 
 def mac (host ,address):
     for h in host_list:
         if(h.name == host):
            h.mac = address
      
-
+#arreglar para dos cables
 def connect(time,port1,port2):
     port_1=port1.split('_')
     port_2=port2.split('_')
@@ -135,6 +120,7 @@ def connect(time,port1,port2):
             sending.remove(i)
     return
 
+#arreglar para dos cables
 def dfs_update(device):  #restablece las propiedades de los dispositivos que son alcanzables desde device
     device.value = -1
     if isinstance(device, structs.Host):
@@ -146,6 +132,7 @@ def dfs_update(device):  #restablece las propiedades de los dispositivos que son
         else:
             device.states[i] = 'null'
 
+#arreglar para dos cables
 def disconnect(time,port):
     
     port = port.split('_')
@@ -182,6 +169,7 @@ def take_Host(mac):
             return i
     return None
 
+
 def to_sendig():
     if len(stopsend)> 0 :
         for i in stopsend:
@@ -199,7 +187,7 @@ def to_sendig():
             i.time_to_send += 1
             temp = i.data_to_send[0]
                # if int(i.value) == -1 or i.value == temp: todo lo que esta acontinuacion hasta el else iba dentro del if 
-            i.states[0] = i.states[0]+"send"
+            i.state_send[0] = True
             sending.append(i)
             i.value = i.data_to_send.pop(0)
             i.collision = "ok"
@@ -210,17 +198,8 @@ def to_sendig():
 
     return
 
-"""def to_sending_frame():
-    if len(stopframe)>0:
-        for i in stopframe:
-            host = i.host_origen
-            if(host not in sending):
-              pass
-    pass
-"""
-    
 
-
+#arreglar
 def writetxt(time):
     for device in Devices:
             s = open('devices/' + device.name + '.txt', 'a+')
@@ -240,7 +219,7 @@ def writetxt(time):
 
 def update_sending():
     for i in sending:
-        i.states[0] = "send"
+        i.state_send[0] = True
         i.value = i.data_to_send.pop(0)
         i.collision = "ok"
         i.send(i)
