@@ -3,8 +3,8 @@ class Device: #estructura general que engloba a todos los dispositivos
         self.name=name
         self.states=["null"]*PortsNumber #representa el estado de cada uno de los puertos
         self.ports=[None]*PortsNumber # representa a cada uno de los puertos
-        self.value=-1 #informacion que se esta transmitiendo o reciviendo en el canal
-        self.value_recive = -1
+        self.value=-1 #informacion que se esta reciviendo en el canal
+        self.value_send = -1
 
 
         # este metodo send de los dispositivos hace un recorrido en profundidad por los puertos

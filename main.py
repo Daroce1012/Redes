@@ -1,5 +1,6 @@
 from asyncio.windows_events import NULL
-from frame import Frame, bin_hex
+from frame import Frame
+from  frame import Hash,bin_hex,bin_dec,hex_bin,hex_dec,bin_hex_por_partes
 import structs
 import os
 import shutil
@@ -10,6 +11,21 @@ Devices=[]
 sending = []
 stopsend = []
 #stopframe = []
+
+def deteccion_errores(bin_str):
+
+    data=bin_str[32:]
+    
+    datos_size=bin_dec(data[0:8])
+    datos_verif_size=bin_dec(data[8:16])
+    
+    pos_final=(datos_size*8)+16
+    datos=data[16:pos_final]
+    datos_verif=data[pos_final:(datos_verif_size*8)+pos_final]
+    hash_datos=Hash(bin_hex_por_partes(datos))
+
+    return bin_dec(hash_datos)==bin_dec(datos_verif)
+
 
 def read_Script(name):
     with open(name,"r") as archivo:
@@ -169,20 +185,25 @@ def take_Host(mac):
 def to_sendig():
     if len(stopsend)> 0 :
         for i in stopsend:
-            mac_recive = bin_hex(i.data_to_send[0:16])
-            pc_recive = take_Host(mac_recive)
-            if(len(pc_recive.data_to_recive)> ) #estoy aqui por eso tienes el error
-
-            
-            if (i not in sending):
-                i.time_to_send += 1
-                temp = i.data_to_send[0]
+            """#voy a comparar las mac para saber si esta recibiendo de mi la pc a la que quiero enviar
+            mac_recive = bin_hex(i.data_to_send[0:16]) #mac de la pc que recibe
+            pc_recive = take_Host(mac_recive)  #pc que recibe
+            if(len(pc_recive.data_to_recive)> 16) :#estoy aqui por eso tienes el error
+                mac_send = bin_hex( pc_recive.data_to_recive[16:])
+                for j in range(0,len (mac_send)):
+                    if(i.mac[j] != mac_send[j]):
+                        pass
+                
+         """   
+        if (i not in sending):
+            i.time_to_send += 1
+            temp = i.data_to_send[0]
                # if int(i.value) == -1 or i.value == temp: todo lo que esta acontinuacion hasta el else iba dentro del if 
-                i.states[0] = i.states[0]+"send"
-                sending.append(i)
-                i.value = i.data_to_send.pop(0)
-                i.collision = "ok"
-                i.send(i)
+            i.states[0] = i.states[0]+"send"
+            sending.append(i)
+            i.value = i.data_to_send.pop(0)
+            i.collision = "ok"
+            i.send(i)
                 #else:                           #ya no hay colision xq los cables son duplex
                     #i.collision = "collision"
                     #i.time_to_send -= 1

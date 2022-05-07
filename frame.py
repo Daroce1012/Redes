@@ -43,6 +43,15 @@ def veri_data (d):
      a = d[8:16] #Proximo 8 bits
      return bin_dec(a)   
 
+def bin_hex_por_partes(bin_str):
+
+    count=0
+    bin_hex_var=""
+    while(count<len(bin_str)):
+        actual=bin_str[count:count+8]
+        bin_hex_var=bin_hex_var+bin_hex(actual)
+        count=count+8
+    return bin_hex_var
 
 class Frame:
     def __init__(self,host , mac_dest,data):#el data que recibe tiene que ser un string , el host que se recibe es un dispositivo
