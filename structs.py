@@ -4,6 +4,7 @@ class Device: #estructura general que engloba a todos los dispositivos
         self.states=["null"]*PortsNumber #representa el estado de cada uno de los puertos
         self.ports=[None]*PortsNumber # representa a cada uno de los puertos
         self.value=-1 #informacion que se esta transmitiendo o reciviendo en el canal
+        self.value_recive = -1
 
 
         # este metodo send de los dispositivos hace un recorrido en profundidad por los puertos
@@ -30,11 +31,12 @@ class Device: #estructura general que engloba a todos los dispositivos
 class Host(Device):  # estructura host o computer 
     def __init__(self,name):
         super().__init__(name,1)
-        self.time_to_send = -1
-        self.data_to_send=[]
+        self.time_to_send = -1 #tiempo de envio de datos
+        self.data_to_send=  [] #datos que faltan por enviar
+        self.data_to_recive=[] #datos recividos hasta el momento
         self.collision=' '
         self.mac = None
-        self.receive_frame =None #string
+         
 
 class Hub(Device):
     def __init__(self,name,PortsNumber):
@@ -44,6 +46,6 @@ class Hub(Device):
 class Switch(Device):
      def __init__(self,name,PortsNumber):
         super().__init__(name,PortsNumber)
-        self.mac_conect = []
+        self.mac_conect = [[]]
         
 

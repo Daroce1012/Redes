@@ -1,4 +1,5 @@
-from frame import Frame
+from asyncio.windows_events import NULL
+from frame import Frame, bin_hex
 import structs
 import os
 import shutil
@@ -8,30 +9,32 @@ host_list=[]
 Devices=[]
 sending = []
 stopsend = []
-stopframe = []
+#stopframe = []
 
 def read_Script(name):
     with open(name,"r") as archivo:
         for linea in archivo:
             parse(linea)
 
-
 def parse(string_list):
     if(string_list[1]=="create"):
         create(string_list)
+    elif (string_list[1] == "mac"):
+        mac(int(string_list[0]), string_list[2])    
     elif(string_list[1]=="connect"):
         connect(int(string_list[0]),string_list[2],string_list[3])
     elif(string_list[1]=="disconnect"):
         disconnect(int(string_list[0]),string_list[2])
     elif (string_list[1] == "send"):
         send(int(string_list[0]), string_list[2], string_list[3])
-    elif (string_list[1] == "mac"):
-        mac(int(string_list[0]), string_list[2])    
-
-
+    elif (string_list[1] == "send_frame"):
+        send_frame(string_list[2], string_list[3],string_list[4])   
+        
 def create(linea_list):
     if(len(linea_list)==4):
         create_host(int(linea_list[0]), linea_list[3])
+    elif linea_list[2] == "switch":
+        create_switch(int(linea_list[0]), linea_list[3], int(linea_list[4]))
     else:
         create_hub(int(linea_list[0]), linea_list[3], int(linea_list[4]))
 
@@ -44,9 +47,12 @@ def create_host(time,name):
     host_list.append(host_)
     Devices.append(host_)
 
+def create_switch(time,name,puertos):
+    switch_=structs.Hub(name, puertos)
+    Devices.append(switch_)
 
 
-def send(time,host,data):
+def send(host,data):
     for i in Devices:
         if(i.name == host):
             i.data_to_send = [x for x in data]
@@ -55,14 +61,19 @@ def send(time,host,data):
 
     return
 
+
+#Modificar esto que no sirve
 def send_frame(host,mac_destino,data):
     frame = None
     for i in host_list:
         if i.name == host:
             frame = Frame(i,mac_destino,data)
+            send_f = frame.mac_destino + frame.mac_origen + frame.data
+            send(host,send_f)
             break
-    if frame != None:
-        stopframe.append(frame)
+  #  if frame != None:
+   #     stopframe.append(frame)
+
 
 
 
@@ -149,27 +160,44 @@ def disconnect(time,port):
 
     return
 
+def take_Host(mac):
+    for i in host_list:
+        if(i.mac == mac) :
+            return i
+    return None
+
 def to_sendig():
     if len(stopsend)> 0 :
         for i in stopsend:
-            i.time_to_send += 1
-            if (i not in sending):
-                temp = i.data_to_send[0]
-                i.states[0] = "send"
-                if int(i.value) == -1 or i.value == temp:
-                    sending.append(i)
-                    i.value = i.data_to_send.pop(0)
-                    i.collision = "ok"
-                    i.send(i)
-                else:
-                    i.collision = "collision"
-                    i.time_to_send -= 1
+            mac_recive = bin_hex(i.data_to_send[0:16])
+            pc_recive = take_Host(mac_recive)
+            if(len(pc_recive.data_to_recive)> ) #estoy aqui por eso tienes el error
 
+            
+            if (i not in sending):
+                i.time_to_send += 1
+                temp = i.data_to_send[0]
+               # if int(i.value) == -1 or i.value == temp: todo lo que esta acontinuacion hasta el else iba dentro del if 
+                i.states[0] = i.states[0]+"send"
+                sending.append(i)
+                i.value = i.data_to_send.pop(0)
+                i.collision = "ok"
+                i.send(i)
+                #else:                           #ya no hay colision xq los cables son duplex
+                    #i.collision = "collision"
+                    #i.time_to_send -= 1
 
     return
 
-def to_sending_frame():
+"""def to_sending_frame():
+    if len(stopframe)>0:
+        for i in stopframe:
+            host = i.host_origen
+            if(host not in sending):
+              pass
     pass
+"""
+    
 
 
 def writetxt(time):
@@ -202,10 +230,10 @@ def update_value(delete):
         if (i not in delete):
             i.data_to_send.insert(0, i.value)
     for h in delete:
-         h.value = -1
-         h.time_to_send = -1
-         dfs_update(h)
-         sending.remove(h)
+        h.value = -1
+        h.time_to_send = -1
+        dfs_update(h)
+        sending.remove(h)
 
 
 def main():
