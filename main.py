@@ -106,12 +106,12 @@ def connect(time,port1,port2):
         elif(j.name==port_2[0]):
             device_2=j
 
-    device_1.ports[int(port_1[1]) - 1] = device_2
-    device_2.ports[int(port_2[1]) - 1] = device_1
+    device_1.ports[int(port_1[1]) - 1] = device_2 #send del device 1
+    device_2.ports[int(port_2[1]) - 1] = device_1 #send del device 2
 
-    if device_1.value !=-1:
+    if device_1.value_send !=-1:
         device_1.send(device_1)
-    elif device_2.value !=-1:
+    elif device_2.value_send !=-1:
         device_2.send(device_2)
 
     for i in sending:

@@ -3,12 +3,12 @@ from pickle import FALSE
 
 class Device: #estructura general que engloba a todos los dispositivos
     def __init__(self,name,PortsNumber):
-        self.name=name
-        self.state_send=[False]*PortsNumber #representa el estado de cada uno de los puertos
-        self.state_recive=[False]*PortsNumber
-        self.ports=[None]*PortsNumber # representa a cada uno de los puertos
-        self.value=-1 #informacion que se esta reciviendo en el canal
-        self.value_send = -1
+        self.name=name                        # nombre del dispositivo
+        self.state_send=[False]*PortsNumber   # representa el estado de envio en cada uno de los puertos
+        self.state_recive=[False]*PortsNumber # representa el estado de recepcion en cada uno de los puerto
+        self.ports=[None]*PortsNumber         # representa a cada uno de los puertos
+        self.value_send=[-1]*PortsNumber      # informacion que se esta enviando por el puertp
+        self.value_recive = [-1]*PortsNumber  # informacion que se esta reciviendo por el puerto
 
 
         # este metodo send de los dispositivos hace un recorrido en profundidad por los puertos
@@ -35,11 +35,11 @@ class Device: #estructura general que engloba a todos los dispositivos
 class Host(Device):  # estructura host o computer 
     def __init__(self,name):
         super().__init__(name,1)
-        self.time_to_send = -1 #tiempo de envio de datos
-        self.data_to_send=  [] #datos que faltan por enviar
-        self.data_to_recive=[] #datos recividos hasta el momento
-        self.collision=' '
-        self.mac = None
+        self.time_to_send = -1 # tiempo de envio de datos
+        self.data_to_send=  [] # datos que faltan por enviar
+        self.data_to_recive=[] # datos recividos hasta el momento
+        self.collision=' '     # representa si hubo una colision en el puerto
+        self.mac = None        # direccion mac del dispositivo
          
 
 class Hub(Device):
