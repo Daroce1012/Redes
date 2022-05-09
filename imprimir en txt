@@ -19,16 +19,29 @@ def writetxt(time):
             for i in range(len(device.ports)):
                 if isinstance(device, structs.Host):
                     tempvalue = str(device.value)
-                    #if(device.collision == "collision"):
-                        #tempvalue = device.data_to_send[0]
-                    if(device.states[i]=="receive"):
+                    if(device.state_recive[i] and device.state_send[i]):
                         tempvalue=str(device.data_to_recive[len(device.data_to_recive)-1])
-                    elif(device.state[i]=="send"):
+                        tempvalue_1=str(device.data_to_send[0])
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
+                        tempvalue + ' ' + "send:" + ' ' + tempvalue_1 +  '  ' + device.collision,
+                            file=s)
+                    elif(device.state_send[i]):
                         tempvalue = device.data_to_send[0]
-                    print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + device.states[i] + '  ' + (
-                    tempvalue if device.states[i] != 'null' else ' ') + '  ' + device.collision,
-                        file=s)
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "send" + '  ' +
+                        tempvalue  + '  ' + device.collision,
+                            file=s)
+                    elif(device.state_recive[i]):
+                        tempvalue=str(device.data_to_recive[len(device.data_to_recive)-1])
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
+                        tempvalue + '  ' + device.collision,
+                            file=s)
                 else:
-                    print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + device.states[i] + '  ' + (
-                    str(device.value) if device.states[i] != 'null' else ' '), file=s)
+                    if(device.state_recive):
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive" + '  ' + 
+                        str(device.data_to_recive), file=s)
+                    elif(device.state_send):
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "send" + '  ' + 
+                        str(device.data_to_send), file=s)
+                    else:
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1)  + '-1' + ' ', file=s)
             s.close()
