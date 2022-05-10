@@ -33,29 +33,29 @@ class Device: #estructura general que engloba a todos los dispositivos
                         #como solucionar esta colision hablo de esto belsai     
                                     
                     self.value_receive[i] = temp    # actualizo el valor a recibir
-
+                    """
                     #if device.value != -1 and isinstance(self, Host) and self.state_send[0] == True and device.value != temp:
                         #self.collision = "collision"
                         #self.data_to_send.insert(0,temp)
                     #self.state_receive[i] = True  
-                      
+                    """                      
                 else: # el resto de los puertos envian mi valor en caso de que sea un host , pero si es un switch , ya eso cambia
                   
                     if(isinstance(self, Switch)):
                         pass
 
                     else:
-                       self.state_send[i] = True  #actualiza el estado
+                       self.state_send[i] = True  # actualiza el estado
                        self.value_send[i] = temp  # agregarle al resto de los puertos , los puertos se van recorriendo por el for de arriba y aqui se le pone el value
                        
-                       next_self = self.ports[i] #dispositivo alcanzable desde self , i puerto de self que envia a este dipositivo
+                       next_self = self.ports[i]  # dispositivo alcanzable desde self , i puerto de self que lo conecta a este dipositivo
                        value_next = 0
-                       for j in range(0, len(next_self.ports)):
-                           if next_self.ports[j] == self:
+                       for j in range(0, len(next_self.ports)): # buscando el valor que tiene el otro dispositivo en receive
+                           if next_self.ports[j] == self:       # j puerto que conecta al dispositivo con self
                                value_next = next_self.value_receive[j]
 
-                       if(value_next != temp): #si el dispositvo al que se llega a traves de self no esta actualizado
-                            self.ports[i].send(self)
+                       if(value_next != temp):       # si el dispositvo al que se llega a traves de self no esta actualizado
+                            self.ports[i].send(self) # expandir a self 
                     """self.state_send[i] = True
                     if (self.ports[i].value != self.value):
                         self.ports[i].send(self)
