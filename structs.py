@@ -27,7 +27,6 @@ class Device: #estructura general que engloba a todos los dispositivos
                 if (self.ports[i] == device):       # me busco en los puesrtos del que quiero enviales la informacion
 
                     self.state_receive[i] = True    # actualizando el estado
-                    self.value_receive[i] = temp    # actualizo el valor a recibir
                     
                     if(isinstance(self, Host) and self.value_receive[i] !=-1 and self.ports[i].state_receive and self.value_receive[i] != temp ):
                         self.self.collision = "collision"
@@ -41,18 +40,22 @@ class Device: #estructura general que engloba a todos los dispositivos
                     #self.state_receive[i] = True  
                       
                 else: # el resto de los puertos envian mi valor en caso de que sea un host , pero si es un switch , ya eso cambia
-                    #if(isinstance(self, Hub)):
-                        #pass
-
+                  
                     if(isinstance(self, Switch)):
                         pass
 
                     else:
-                       self.state_send[i] = True
-                       self.value_send[i] = temp    # agregarle al resto de los puertos 
+                       self.state_send[i] = True  #actualiza el estado
+                       self.value_send[i] = temp  # agregarle al resto de los puertos , los puertos se van recorriendo por el for de arriba y aqui se le pone el value
+                       
+                       next_self = self.ports[i] #dispositivo alcanzable desde self , i puerto de self que envia a este dipositivo
+                       value_next = 0
+                       for j in range(0, len(next_self.ports)):
+                           if next_self.ports[j] == self:
+                               value_next = next_self.value_receive[j]
 
-                    if(self.ports[i] != temp):
-                        pass
+                       if(value_next != temp): #si el dispositvo al que se llega a traves de self no esta actualizado
+                            self.ports[i].send(self)
                     """self.state_send[i] = True
                     if (self.ports[i].value != self.value):
                         self.ports[i].send(self)
