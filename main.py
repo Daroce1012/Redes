@@ -120,17 +120,34 @@ def connect(time,port1,port2):
             sending.remove(i)
     return
 
-#arreglar para dos cables
-def dfs_update(device):  #restablece las propiedades de los dispositivos que son alcanzables desde device
-    device.value = -1
+
+def dfs_update_all(device): #restablece las propiedades de los dispositivos que son alcanzables desde device
     if isinstance(device, structs.Host):
         device.collision = ' '
     for i in range(len(device.ports)):
-        if device.ports[i] != None and device.states[i] != 'null':
-            device.states[i] = 'null'
+        device.state_receive[i] = False
+        device.value_receive = -1
+        device.state_send = False
+        device.value_send = -1
+        if device.ports[i] != None :           
+            dfs_update(device.ports[i])
+        
+#arreglar para dos cables
+def dfs_update(device):  #restablece las propiedades de los dispositivos que son alcanzables desde device
+    #device.value = -1
+    if isinstance(device, structs.Host):
+        device.collision = ' '
+    for i in range(len(device.ports)):
+        if device.ports[i] != None :
+            device.state_receive[i] = False
+            device.state_send = False
+
+            #device.states[i] = 'null'
             dfs_update(device.ports[i])
         else:
-            device.states[i] = 'null'
+            #device.states[i] = 'null' 
+            device.state_receive[i] = False
+            #device.state_send = False
 
 #arreglar para dos cables
 def disconnect(time,port):
