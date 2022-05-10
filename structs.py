@@ -31,8 +31,13 @@ class Device: #estructura general que engloba a todos los dispositivos
                     if(isinstance(self, Host) and self.value_receive[i] !=-1 and self.ports[i].state_receive and self.value_receive[i] != temp ):
                         self.self.collision = "collision"
                         #como solucionar esta colision hablo de esto belsai     
-                                    
+                    
                     self.value_receive[i] = temp    # actualizo el valor a recibir
+                    if(isinstance(self, Host) or isinstance(self, Switch)):
+                        self.data_to_receive.append(temp)
+
+                    
+                    
                     """
                     #if device.value != -1 and isinstance(self, Host) and self.state_send[0] == True and device.value != temp:
                         #self.collision = "collision"
@@ -79,6 +84,8 @@ class Hub(Device):
 class Switch(Device):
      def __init__(self,name,PortsNumber):
         super().__init__(name,PortsNumber)
-        self.mac_conect = [[]]
+        self.mac_conect = [[]]  # tabla lista de mac y puertos
+        self.data_to_receive=[] # frame
+        self.frame_stop = []    # guarda los frame que tiene en stop
         
 

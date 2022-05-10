@@ -121,9 +121,12 @@ def connect(time,port1,port2):
     return
 
 
-def dfs_update_all(device): #restablece las propiedades de los dispositivos que son alcanzables desde device
+def dfs_update_all(device): #restablece las propiedades de los dispositivos que son alcanzables desde device en todos las direcciones
     if isinstance(device, structs.Host):
         device.collision = ' '
+        device.data_to_receive = []
+    if isinstance(device, structs.Switch):
+        device.data_to_receive = []
     for i in range(len(device.ports)):
         device.state_receive[i] = False
         device.value_receive = -1
