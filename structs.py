@@ -31,7 +31,8 @@ class Device: #estructura general que engloba a todos los dispositivos
                     
                     if(isinstance(self, Host) and self.value_receive[i] !=-1 and self.ports[i].state_receive and self.value_receive[i] != temp ):
                         self.self.collision = "collision"
-                        #como solucionar esta colision                  
+                        #como solucionar esta colision hablo de esto belsai     
+                                    
                     self.value_receive[i] = temp    # actualizo el valor a recibir
 
                     #if device.value != -1 and isinstance(self, Host) and self.state_send[0] == True and device.value != temp:
