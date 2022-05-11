@@ -40,7 +40,7 @@ def parse(string_list):
     elif(string_list[1]=="disconnect"):
         disconnect(int(string_list[0]),string_list[2])
     elif (string_list[1] == "send"):
-        send(int(string_list[0]), string_list[2], string_list[3])
+        send(string_list[2], string_list[3])
     elif (string_list[1] == "send_frame"):
         send_frame(string_list[2], string_list[3],string_list[4])   
         
@@ -194,10 +194,10 @@ def to_sendig():
     if len(stopsend)> 0 :
         for i in stopsend:
             """#voy a comparar las mac para saber si esta recibiendo de mi la pc a la que quiero enviar
-            mac_recive = bin_hex(i.data_to_send[0:16]) #mac de la pc que recibe
-            pc_recive = take_Host(mac_recive)  #pc que recibe
-            if(len(pc_recive.data_to_recive)> 16) :#estoy aqui por eso tienes el error
-                mac_send = bin_hex( pc_recive.data_to_recive[16:])
+            mac_receive = bin_hex(i.data_to_send[0:16]) #mac de la pc que recibe
+            pc_receive = take_Host(mac_receive)  #pc que recibe
+            if(len(pc_receive.data_to_receive)> 16) :#estoy aqui por eso tienes el error
+                mac_send = bin_hex( pc_receive.data_to_receive[16:])
                 for j in range(0,len (mac_send)):
                     if(i.mac[j] != mac_send[j]):
                         pass
@@ -221,9 +221,9 @@ def to_sendig():
 
 def data_txt(time):
     for item in host_list:
-        if(item.data_to_recive!=None):
+        if(item.data_to_receive!=None):
             h=open('host_data/'+item.name+'_data.txt','a+')
-            _frame=item.data_to_recive
+            _frame=item.data_to_receive
             mac_send=_frame[16:32]
             data=_frame[32:]
             if(deteccion_errores(data)):
@@ -239,9 +239,9 @@ def writetxt(time):
             s = open('devices/' + device.name + '.txt', 'a+')
             for i in range(len(device.ports)):
                 if isinstance(device, structs.Host):
-                    tempvalue = str(device.value)
-                    if(device.state_recive[i] and device.state_send[i]):
-                        tempvalue=str(device.data_to_recive[len(device.data_to_recive)-1])
+                    #tempvalue = str(device.value)
+                    if(device.state_receive[i] and device.state_send[i]):
+                        tempvalue=str(device.data_to_receive[len(device.data_to_receive)-1])
                         tempvalue_1=str(device.data_to_send[0])
                         print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
                         tempvalue + ' ' + "send:" + ' ' + tempvalue_1 +  '  ' + device.collision,
@@ -251,18 +251,18 @@ def writetxt(time):
                         print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "send" + '  ' +
                         tempvalue  + '  ' + device.collision,
                             file=s)
-                    elif(device.state_recive[i]):
-                        tempvalue=str(device.data_to_recive[len(device.data_to_recive)-1])
+                    elif(device.state_receive[i]):
+                        tempvalue=str(device.data_to_receive[len(device.data_to_receive)-1])
                         print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
                         tempvalue + '  ' + device.collision,
                             file=s)
                 else:
-                    if(device.state_recive):
+                    if(device.state_receive):
                         print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive" + '  ' + 
-                        str(device.data_to_recive), file=s)
+                        str(device.value_receive), file=s)
                     elif(device.state_send):
                         print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "send" + '  ' + 
-                        str(device.data_to_send), file=s)
+                        str(device.value_send), file=s)
                     else:
                         print(str(time) + '  ' + device.name + '_' + str(i + 1)  + '-1' + ' ', file=s)
             s.close()

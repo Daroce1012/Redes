@@ -1,7 +1,4 @@
-from lib2to3.pygram import pattern_symbols
-
-
-class Device: #estructura general que engloba a todos los dispositivos
+class Device:                                  # estructura general que engloba a todos los dispositivos
     def __init__(self,name,PortsNumber):
         self.name=name                         # nombre del dispositivo
         self.state_send=[False]*PortsNumber    # representa el estado de envio en cada uno de los puertos
@@ -18,9 +15,9 @@ class Device: #estructura general que engloba a todos los dispositivos
     def send(self, device):
         temp = -1
         # self.value = device.value
-        for i in range(len(device.ports)): #Buscando el valor a enviar
+        for i in range(len(device.ports)):                              # Buscando el valor a enviar
              if (device.ports[i] != None and device.ports[i] == self):
-                   temp = device.value_send[i] #Valor que se le va a enviar al destino
+                   temp = device.value_send[i]                          # Valor que se le va a enviar al destino
 
         for i in range(len(self.ports)):
             if (self.ports[i] != None):
@@ -48,10 +45,10 @@ class Device: #estructura general que engloba a todos los dispositivos
                         pass
 
                     else:
-                       self.state_send[i] = True  # actualiza el estado
-                       self.value_send[i] = temp  # agregarle al resto de los puertos , los puertos se van recorriendo por el for de arriba y aqui se le pone el value
+                       self.state_send[i] = True                # actualiza el estado
+                       self.value_send[i] = str(temp)           # agregarle al resto de los puertos , los puertos se van recorriendo por el for de arriba y aqui se le pone el value
                        
-                       next_self = self.ports[i]  # dispositivo alcanzable desde self , i puerto de self que lo conecta a este dipositivo
+                       next_self = self.ports[i]                # dispositivo alcanzable desde self , i puerto de self que lo conecta a este dipositivo
                        value_next = 0
                        for j in range(0, len(next_self.ports)): # buscando el valor que tiene el otro dispositivo en receive
                            if next_self.ports[j] == self:       # j puerto que conecta al dispositivo con self
@@ -64,12 +61,12 @@ class Device: #estructura general que engloba a todos los dispositivos
                         self.ports[i].send(self)
                     """
 
-class Host(Device):  # estructura host o computer 
+class Host(Device):             # estructura host
     def __init__(self,name):
         super().__init__(name,1)
         self.time_to_send = -1  # tiempo de envio de datos
         self.data_to_send=  []  # datos que faltan por enviar
-        self.data_to_receive=[] # datos recividos hasta el momento
+        self.data_to_receive=[] # datos recibidos hasta el momento
         self.collision=' '      # representa si hubo una colision en el puerto
         self.mac = None         # direccion mac del dispositivo
          
@@ -82,8 +79,7 @@ class Hub(Device):
 class Switch(Device):
      def __init__(self,name,PortsNumber):
         super().__init__(name,PortsNumber)
-        self.mac_conect = [[]]  # tabla lista de mac y puertos
-        self.data_to_receive=[] # frame
-        self.frame_stop = []    # guarda los frame que tiene en stop
+        self.mac_connect = [[]]  # tabla lista de mac y puertos
+        self.data_to_receive=[]  # frame
+        self.frame_stop = []     # guarda los frame que tiene en stop
         
-
