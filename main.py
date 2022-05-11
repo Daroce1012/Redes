@@ -76,7 +76,6 @@ def send(host,data):
     return
 
 
-#Modificar esto que no sirve
 def send_frame(host,mac_destino,data):
     frame = None
     for i in host_list:
@@ -85,15 +84,14 @@ def send_frame(host,mac_destino,data):
             send_f = frame.mac_destino + frame.mac_origen + frame.size + frame.size_dato_veri + frame.data + frame.dato_veri
             send(host,send_f)
             break
-  #  if frame != None:
-   #     stopframe.append(frame)
+  
 
 def mac (host ,address):
     for h in host_list:
         if(h.name == host):
            h.mac = address
      
-#arreglar para dos cables
+#arreglar para switch y probar
 def connect(time,port1,port2):
     port_1=port1.split('_')
     port_2=port2.split('_')
@@ -109,9 +107,9 @@ def connect(time,port1,port2):
     device_1.ports[int(port_1[1]) - 1] = device_2 #send del device 1
     device_2.ports[int(port_2[1]) - 1] = device_1 #send del device 2
 
-    if device_1.value_send !=-1:
+    if device_1.value_send[int(port_1[1]) - 1] !=-1:
         device_1.send(device_1)
-    elif device_2.value_send !=-1:
+    elif device_2.value_send[int(port_1[1]) - 1] !=-1:
         device_2.send(device_2)
 
     for i in sending:
@@ -135,24 +133,27 @@ def dfs_update_all(device): #restablece las propiedades de los dispositivos que 
         if device.ports[i] != None :           
             dfs_update(device.ports[i])
         
-#arreglar para dos cables
-def dfs_update(device):  #restablece las propiedades de los dispositivos que son alcanzables desde device
+#ponerlo funcional para el switch
+def dfs_update(device):  #restablece las propiedades de los dispositivos que son alcanzables desde device en un solo sentido
     #device.value = -1
     if isinstance(device, structs.Host):
         device.collision = ' '
     for i in range(len(device.ports)):
-        if device.ports[i] != None :
-            device.state_receive[i] = False
-            device.state_send = False
-
+        if device.ports[i] != None  and device.state_send[i]:
+            device.state_send[i] = False
+            device.value_send[i] = -1
             #device.states[i] = 'null'
             dfs_update(device.ports[i])
         else:
             #device.states[i] = 'null' 
             device.state_receive[i] = False
-            #device.state_send = False
+            device.state_receive[i] = False
+            if isinstance(device, structs.Host) or isinstance(device, structs.Switch):
+                device.value_receive = -1
+                device.data_to_receive = []
+            
 
-#arreglar para dos cables
+#arreglar para switch y probar
 def disconnect(time,port):
     
     port = port.split('_')
@@ -175,11 +176,11 @@ def disconnect(time,port):
             device2.ports[i] = None
 
     device1.ports[port] = None
-    if(device1.states[port] == "send"):
+    if(device1.state_send[port]):
        dfs_update(device2)
 
     else:
-     dfs_update(device1)
+        dfs_update(device1)
 
     return
 
