@@ -219,21 +219,52 @@ def to_sendig():
     return
 
 
-#arreglar
+def data_txt(time):
+    for item in host_list:
+        if(item.data_to_recive!=None):
+            h=open('host_data/'+item.name+'_data.txt','a+')
+            _frame=item.data_to_recive
+            mac_send=_frame[16:32]
+            data=_frame[32:]
+            if(deteccion_errores(data)):
+                print(str(time) + ' ' + mac_send + ' ' + data)
+                h.close()
+            else:
+                print(str(time) + ' ' + mac_send + ' ' + data + 'ERROR')
+                h.close()
+
 def writetxt(time):
+    tempvalue=-1
     for device in Devices:
             s = open('devices/' + device.name + '.txt', 'a+')
             for i in range(len(device.ports)):
                 if isinstance(device, structs.Host):
                     tempvalue = str(device.value)
-                    if(device.collision == "collision"):
-                            tempvalue = device.data_to_send[0]
-                    print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + device.states[i] + '  ' + (
-                     tempvalue if device.states[i] != 'null' else ' ') + '  ' + device.collision,
-                          file=s)
+                    if(device.state_recive[i] and device.state_send[i]):
+                        tempvalue=str(device.data_to_recive[len(device.data_to_recive)-1])
+                        tempvalue_1=str(device.data_to_send[0])
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
+                        tempvalue + ' ' + "send:" + ' ' + tempvalue_1 +  '  ' + device.collision,
+                            file=s)
+                    elif(device.state_send[i]):
+                        tempvalue = device.data_to_send[0]
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "send" + '  ' +
+                        tempvalue  + '  ' + device.collision,
+                            file=s)
+                    elif(device.state_recive[i]):
+                        tempvalue=str(device.data_to_recive[len(device.data_to_recive)-1])
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
+                        tempvalue + '  ' + device.collision,
+                            file=s)
                 else:
-                    print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + device.states[i] + '  ' + (
-                    str(device.value) if device.states[i] != 'null' else ' '), file=s)
+                    if(device.state_recive):
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive" + '  ' + 
+                        str(device.data_to_recive), file=s)
+                    elif(device.state_send):
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "send" + '  ' + 
+                        str(device.data_to_send), file=s)
+                    else:
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1)  + '-1' + ' ', file=s)
             s.close()
 
 
@@ -292,6 +323,7 @@ def main():
                 delete.append(device) #quitar de sending
                 if len(device.data_to_send) == 0:  # ademas, si ya no tiene mas bits q enviar sale de la cola de los q quieren enviar
                     stopsend.remove(device)
+                    data_txt(time)
 
         if(len(delete)>0):
            update_value(delete)
