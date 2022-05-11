@@ -35,8 +35,6 @@ class Device: #estructura general que engloba a todos los dispositivos
                     self.value_receive[i] = temp    # actualizo el valor a recibir
                     if(isinstance(self, Host) or isinstance(self, Switch)):
                         self.data_to_receive.append(temp)
-
-                    
                     
                     """
                     #if device.value != -1 and isinstance(self, Host) and self.state_send[0] == True and device.value != temp:

@@ -147,7 +147,6 @@ def dfs_update(device):  #restablece las propiedades de los dispositivos que son
         else:
             #device.states[i] = 'null' 
             device.state_receive[i] = False
-            device.state_receive[i] = False
             if isinstance(device, structs.Host) or isinstance(device, structs.Switch):
                 device.value_receive = -1
                 device.data_to_receive = []
@@ -210,7 +209,7 @@ def to_sendig():
                # if int(i.value) == -1 or i.value == temp: todo lo que esta acontinuacion hasta el else iba dentro del if 
             i.state_send[0] = True
             sending.append(i)
-            i.value = i.data_to_send.pop(0)
+            i.value_send = i.data_to_send.pop(0)
             i.collision = "ok"
             i.send(i)
                 #else:                           #ya no hay colision xq los cables son duplex
@@ -251,7 +250,7 @@ def update_value(delete):
         if (i not in delete):
             i.data_to_send.insert(0, i.value)
     for h in delete:
-        h.value = -1
+        h.value_send[0] = -1
         h.time_to_send = -1
         dfs_update(h)
         sending.remove(h)
