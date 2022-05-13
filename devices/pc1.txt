@@ -1,0 +1,11 @@
+0  spc1_1  receive:  -1  send -1  
+1  pc1_1 receive:  -1  send  1  ok
+2  pc1_1 receive:  -1  send  1  ok
+3  pc1_1 receive:  -1  send  1  ok
+4  pc1_1 receive:  -1  send  1  ok
+5  pc1_1 receive:  -1  send  1  ok
+6  pc1_1 receive:  -1  send  1  ok
+7  pc1_1 receive:  -1  send  1  ok
+8  pc1_1 receive:  -1  send  1  ok
+9  pc1_1 receive:  -1  send  1  ok
+10  pc1_1 receive:  -1  send  1  ok
