@@ -253,21 +253,20 @@ def writetxt(time):
                             file=s)
                     elif(device.state_receive[i]):
                         tempvalue=str(device.data_to_receive[len(device.data_to_receive)-1])
-                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
+                        print(str(time) + '  s' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
                         tempvalue + '  ' + device.collision,
                             file=s)
                 else:
                     if(device.state_receive):
                         print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive" + '  ' + 
-                        str(device.value_receive), file=s)
+                        str(device.value_receive[i]), file=s)
                     elif(device.state_send):
                         print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "send" + '  ' + 
-                        str(device.value_send), file=s)
+                        str(device.value_send[i]), file=s)
                     else:
                         print(str(time) + '  ' + device.name + '_' + str(i + 1)  + '-1' + ' ', file=s)
             s.close()
-
-
+            
 def update_sending():
     for i in sending:
         i.state_send[0] = True
