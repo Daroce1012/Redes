@@ -13,7 +13,7 @@ class Device:                                  # estructura general que engloba 
         # asigna el valor en canal a todos los otros dispositivos que se alcancen, asignandole ademas el estado por puerto a cada uno
 
     def send(self, device):
-        temp = -1
+        temp = '-1'
         # self.value = device.value
         for i in range(len(device.ports)):                              # Buscando el valor a enviar
              if (device.ports[i] != None and device.ports[i] == self):
@@ -45,20 +45,22 @@ class Device:                                  # estructura general que engloba 
                         pass
 
                     else:
-                       self.state_send[i] = True                # actualiza el estado
-                       self.value_send[i] = str(temp)           # agregarle al resto de los puertos , los puertos se van recorriendo por el for de arriba y aqui se le pone el value
-                       
-                       next_self = self.ports[i]                # dispositivo alcanzable desde self , i puerto de self que lo conecta a este dipositivo
-                       value_next = 0
-                       for j in range(0, len(next_self.ports)): # buscando el valor que tiene el otro dispositivo en receive
+                        if(self is not device):
+                           self.state_send[i] = True                # actualiza el estado
+                           self.value_send[i] = str(temp)           # agregarle al resto de los puertos , los puertos se van recorriendo por el for de arriba y aqui se le pone el value
+                        else:
+                            temp = self.value_send[i]
+                        next_self = self.ports[i]                # dispositivo alcanzable desde self , i puerto de self que lo conecta a este dipositivo
+                        value_next = 0
+                        for j in range(0, len(next_self.ports)): # buscando el valor que tiene el otro dispositivo en receive
                            if next_self.ports[j] == self:       # j puerto que conecta al dispositivo con self
                                value_next = next_self.value_receive[j]
 
-                       if(value_next != temp):       # si el dispositvo al que se llega a traves de self no esta actualizado
+                        if(value_next != temp):       # si el dispositvo al que se llega a traves de self no esta actualizado
                             self.ports[i].send(self) # expandir a self 
-                    """self.state_send[i] = True
-                    if (self.ports[i].value != self.value):
-                        self.ports[i].send(self)
+                    """ self.state_send[i] = True
+                        if (self.ports[i].value != self.value):
+                            self.ports[i].send(self)
                     """
 
 class Host(Device):             # estructura host

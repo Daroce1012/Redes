@@ -1,5 +1,4 @@
 0 create hub h 4
-0 create swith s 4
 0 create host pc1
 0 connect h_1 pc1_1
-1 send pc1 10110101
+1 send pc1 1

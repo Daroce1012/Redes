@@ -209,7 +209,7 @@ def to_sendig():
                # if int(i.value) == -1 or i.value == temp: todo lo que esta acontinuacion hasta el else iba dentro del if 
             i.state_send[0] = True
             sending.append(i)
-            i.value_send = i.data_to_send.pop(0)
+            i.value_send[0] = i.data_to_send.pop(0)
             i.collision = "ok"
             i.send(i)
                 #else:                           #ya no hay colision xq los cables son duplex
