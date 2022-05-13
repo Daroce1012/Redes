@@ -191,32 +191,33 @@ def take_Host(mac):
 
 
 def to_sendig():
-    if len(stopsend)> 0 :
+   if len(stopsend)> 0 :
       for i in stopsend:
-         """#voy a comparar las mac para saber si esta recibiendo de mi la pc a la que quiero enviar
-            mac_receive = bin_hex(i.data_to_send[0:16]) #mac de la pc que recibe
-            pc_receive = take_Host(mac_receive)  #pc que recibe
+          #voy a comparar las mac para saber si esta recibiendo de mi la pc a la que quiero enviar
+            mac_receive = bin_hex(i.data_to_send[0:16]) # mac de la pc que recibe
+            pc_receive = take_Host(mac_receive)         # pc que recibe
+            """
             if(len(pc_receive.data_to_receive)> 16) :#estoy aqui por eso tienes el error
                 mac_send = bin_hex( pc_receive.data_to_receive[16:])
                 for j in range(0,len (mac_send)):
                     if(i.mac[j] != mac_send[j]):
                         pass
-                
-          """
-         i.time_to_send += 1
-         if (i not in sending):
-            temp = i.data_to_send[0]
-               # if int(i.value) == -1 or i.value == temp: #todo lo que esta acontinuacion hasta el else iba dentro del if
-            i.state_send[0] = True
-            sending.append(i)
-            i.value_send[0] = i.data_to_send.pop(0)
-            i.collision = "ok"
-            i.send(i)
-                #else:                           #ya no hay colision xq los cables son duplex
-                    #i.collision = "collision"
-                    #i.time_to_send -= 1
+            """     
+            i.time_to_send += 1
+            if (i not in sending):
+                temp = i.data_to_send[0]
+                #if int(i.value) == -1 or i.value == temp: #todo lo que esta acontinuacion hasta el else iba dentro del if
+                if int(pc_receive.value_receive[0]) == -1 or pc_receive.value_receive[0] == temp:
+                   i.state_send[0] = True
+                   sending.append(i)
+                   i.value_send[0] = i.data_to_send.pop(0)
+                   i.collision = "ok"
+                   i.send(i)
+                else:                           
+                   i.collision = "collision"
+                   i.time_to_send -= 1
 
-    return
+    
 
 
 def data_txt(time):
