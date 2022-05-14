@@ -216,7 +216,7 @@ def to_sendig():
                 else:                           
                    i.collision = "collision"
                    i.time_to_send -= 1
-
+   return
     
 
 

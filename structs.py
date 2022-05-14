@@ -50,6 +50,7 @@ class Device:                                  # estructura general que engloba 
                            self.value_send[i] = str(temp)           # agregarle al resto de los puertos , los puertos se van recorriendo por el for de arriba y aqui se le pone el value
                         else:
                             temp = self.value_send[i]
+                        
                         next_self = self.ports[i]                # dispositivo alcanzable desde self , i puerto de self que lo conecta a este dipositivo
                         value_next = 0
                         for j in range(0, len(next_self.ports)): # buscando el valor que tiene el otro dispositivo en receive
