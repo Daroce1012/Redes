@@ -191,32 +191,33 @@ def take_Host(mac):
 
 
 def to_sendig():
-    if len(stopsend)> 0 :
-        for i in stopsend:
-            """#voy a comparar las mac para saber si esta recibiendo de mi la pc a la que quiero enviar
-            mac_receive = bin_hex(i.data_to_send[0:16]) #mac de la pc que recibe
-            pc_receive = take_Host(mac_receive)  #pc que recibe
+   if len(stopsend)> 0 :
+      for i in stopsend:
+          #voy a comparar las mac para saber si esta recibiendo de mi la pc a la que quiero enviar
+            mac_receive = bin_hex("".join(i.data_to_send[0:16])) # mac de la pc que recibe
+            pc_receive = take_Host(mac_receive)         # pc que recibe
+            """
             if(len(pc_receive.data_to_receive)> 16) :#estoy aqui por eso tienes el error
                 mac_send = bin_hex( pc_receive.data_to_receive[16:])
                 for j in range(0,len (mac_send)):
                     if(i.mac[j] != mac_send[j]):
                         pass
-                
-         """   
-        if (i not in sending):
+            """     
             i.time_to_send += 1
-            temp = i.data_to_send[0]
-               # if int(i.value) == -1 or i.value == temp: todo lo que esta acontinuacion hasta el else iba dentro del if 
-            i.state_send[0] = True
-            sending.append(i)
-            i.value_send = i.data_to_send.pop(0)
-            i.collision = "ok"
-            i.send(i)
-                #else:                           #ya no hay colision xq los cables son duplex
-                    #i.collision = "collision"
-                    #i.time_to_send -= 1
-
-    return
+            if (i not in sending):
+                temp = i.data_to_send[0]
+                #if int(i.value) == -1 or i.value == temp: #todo lo que esta acontinuacion hasta el else iba dentro del if
+                if pc_receive!=None and (int(pc_receive.value_receive[0]) == -1 or pc_receive.value_receive[0] == temp):
+                   i.state_send[0] = True
+                   sending.append(i)
+                   i.value_send[0] = i.data_to_send.pop(0)
+                   i.collision = "ok"
+                   i.send(i)
+                else:                           
+                   i.collision = "collision"
+                   i.time_to_send -= 1
+   return
+    
 
 
 def data_txt(time):
@@ -234,40 +235,45 @@ def data_txt(time):
                 h.close()
 
 def writetxt(time):
-    tempvalue=-1
-    for device in Devices:
+        tempvalue = -1
+        for device in Devices:
             s = open('devices/' + device.name + '.txt', 'a+')
             for i in range(len(device.ports)):
                 if isinstance(device, structs.Host):
-                    #tempvalue = str(device.value)
-                    if(device.state_receive[i] and device.state_send[i]):
-                        tempvalue=str(device.data_to_receive[len(device.data_to_receive)-1])
-                        tempvalue_1=str(device.data_to_send[0])
+                    # tempvalue = str(device.value)
+                    if (device.state_receive[i] and device.state_send[i]):
+                        tempvalue = str(device.data_to_receive[len(device.data_to_receive) - 1])
+                        tempvalue_1 = str(device.data_to_send[0])
                         print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
-                        tempvalue + ' ' + "send:" + ' ' + tempvalue_1 +  '  ' + device.collision,
-                            file=s)
-                    elif(device.state_send[i]):
-                        tempvalue = device.data_to_send[0]
-                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "send" + '  ' +
-                        tempvalue  + '  ' + device.collision,
-                            file=s)
-                    elif(device.state_receive[i]):
-                        tempvalue=str(device.data_to_receive[len(device.data_to_receive)-1])
-                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
-                        tempvalue + '  ' + device.collision,
-                            file=s)
-                else:
-                    if(device.state_receive):
-                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive" + '  ' + 
-                        str(device.value_receive), file=s)
-                    elif(device.state_send):
-                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "send" + '  ' + 
-                        str(device.value_send), file=s)
+                              tempvalue + ' ' + "send:" + ' ' + tempvalue_1 + '  ' + device.collision,
+                              file=s)
+                    elif (device.state_send[i] and device.value_send != None):
+                        tempvalue = device.value_send[0]
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + ' ' + "receive:" + '  ' +
+                              "-1" + '  ' + "send" + '  ' + str(tempvalue) + '  ' + device.collision,
+                              file=s)
+                    elif (device.state_receive[i] and device.value_receive != None):
+                        tempvalue = device.value_to_receive[0]
+                        print(str(time) + '  s' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
+                              str(tempvalue) + '  ' + "send" + ' ' + "-1" + '  ' + device.collision,
+                              file=s)
                     else:
-                        print(str(time) + '  ' + device.name + '_' + str(i + 1)  + '-1' + ' ', file=s)
+                        print(str(time) + '  s' + device.name + '_' + str(i + 1) + '  ' + "receive:" + '  ' +
+                              "-1" + '  ' + "send" + ' ' + "-1" + ' ' + device.collision,
+                              file=s)
+                else:
+                    if (device.state_receive[i]):
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive" + '  ' +
+                              str(device.value_receive[i]) + ' ' + "send" + ' ' + "-1", file=s)
+                    elif (device.state_send[i]):
+                        print(
+                            str(time) + '  ' + device.name + '_' + str(i + 1) + '  ' + "receive" + '  ' + "-1" + '  ' +
+                            "send" + '  ' + str(device.value_send[i]), file=s)
+                    else:
+                        print(str(time) + '  ' + device.name + '_' + str(i + 1) + ' ' + "receive" + '  ' + "-1" + '  ' +
+                              "send" + '-1', file=s)
             s.close()
-
-
+            
 def update_sending():
     for i in sending:
         i.state_send[0] = True
