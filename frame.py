@@ -16,6 +16,7 @@ def Mac_Origen(host): #el host que recibe tiene que ser el dispositivo
 def bin_hex(exp_bin):
         hexstr=f'{int(exp_bin,2):X}'
         return hexstr
+        
 
 def hex_bin(exp_hex):
         binstr="{0:08b}".format(int(exp_hex,16))
@@ -49,7 +50,7 @@ def bin_hex_por_partes(bin_str):
     bin_hex_var=""
     while(count<len(bin_str)):
         actual=bin_str[count:count+8]
-        bin_hex_var=bin_hex_var+bin_hex(actual)
+        bin_hex_var=bin_hex_var+bin_hex("".join(actual))
         count=count+8
     return bin_hex_var
 
