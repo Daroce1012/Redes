@@ -1,3 +1,4 @@
+from ast import Compare
 import structs
 
 def Hash(hex_str):
@@ -53,6 +54,16 @@ def bin_hex_por_partes(bin_str):
         bin_hex_var=bin_hex_var+bin_hex("".join(actual))
         count=count+8
     return bin_hex_var
+
+def Compare_Mac(mac_1,mac_2):  # Ambas tienen que estar en el mismo sitema 
+        if(len(mac_2)!=len(mac_1)):
+                return False
+        for i in len(mac_2):
+                if(mac_2[i]!=mac_1[i]):
+                        return False
+
+                
+
 
 class Frame:
     def __init__(self,host , mac_dest,data):#el data que recibe tiene que ser un string , el host que se recibe es un dispositivo

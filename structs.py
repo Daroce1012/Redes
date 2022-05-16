@@ -1,5 +1,5 @@
-from  frame import Hash,bin_hex,bin_dec,hex_bin,hex_dec,bin_hex_por_partes
-from main import take_Host
+from  frame import Hash,bin_hex,bin_dec,hex_bin,hex_dec,bin_hex_por_partes,Compare_Mac
+from main import send_frame, take_Host
 
 class Device:                                  # estructura general que engloba a todos los dispositivos
     def __init__(self,name,PortsNumber):
@@ -15,25 +15,32 @@ class Device:                                  # estructura general que engloba 
         # asignandole ademas el estado por puerto a cada uno,  self es quien recive la informacion 
     def send(self, device): 
         temp = '-1'                                                     # valor que recibio va a recibir self
-        # self.value = device.value
+        
         for i in range(len(device.ports)):                              # Buscando el valor a enviar, buscando el cable de envio
              if (device.ports[i] != None and device.ports[i] == self):
                    temp = device.value_send[i]                          # Valor que se le va a enviar al destino
 
-
         for i in range(len(self.ports)):
             if (self.ports[i] != None):
-
-                if (self.ports[i] == device):       # me busco en los puertos del que quiero enviales la informacion,i representa el puerto de self
-                    self.state_receive[i] = True    # cable que recibe en el self ,actualizando el estado
-                    
-                    if(isinstance(self, Host) and self.value_receive[i] !=-1 and self.ports[i].state_receive and self.value_receive[i] != temp ):
-                        self.self.collision = "collision"
-                        # como solucionar esta colision hablo de esto belsai  
-                        # ver recuperacion de los bits perdidos   
-                    self.value_receive[i] = temp    # actualizo el valor a recibir
-                    if(isinstance(self, Host) or isinstance(self, Switch)):
-                        self.data_to_receive.append(temp)    
+                if (self.ports[i] == device):                 # me busco en los puertos del que quiero enviales la informacion,i representa el puerto de self
+                    self.state_receive[i] =  True             # cable que recibe en el self ,actualizando el estado
+                    if isinstance(self, Host) and self.value_receive[i] !=-1 and self.ports[i].state_receive and self.value_receive[i] != temp :
+                        self.self.collision = "collision"     # como solucionar esta colision ver recuperacion de los bits perdidos 
+                    #   self.state_receive[i] =  False        # verificar esto con el otro proyecto
+                    else:
+                        self.value_receive[i] = temp              # actualizo el valor a recibir
+                        if(isinstance(self, Switch) or isinstance(self, Host)):
+                            self.data_to_receive.append(temp)  
+                        # si la informacion no es para mi , no la pongo  #verificar si la elimino en el tiempo correcto  
+                        if isinstance(self, Host) and len(self.data_to_receive)>15 and bin_hex(self.data_to_receive[0:16]) != self.mac :
+                            self.state_receive[i] = False
+                            self.value_receive[i] = '-1'
+                            self.data_to_receive.pop()
+                        elif isinstance(self, Host) and len(self.data_to_receive)>31:  # agregar la data que se va a enviar
+                            mac_sms = bin_hex(self.data_to_receive[16:32])
+                            send_frame(self,mac_sms,"PONERDATA")
+                                
+                          
 
                 else: # el resto de los puertos envian mi valor en caso de que sea un host , pero si es un switch , ya eso cambia
                     brodcast = True
