@@ -71,16 +71,7 @@ class Device:                                  # estructura general que engloba 
 
                     if(value_next != temp):            # si el dispositvo al que se llega a traves de self no esta actualizado
                         self.ports[puerto].send(self)  # expandir a self       
-                    """"        
-                    if brodcast:
-                        puerto = i    
-                    next_self = self.ports[puerto]                       # dispositivo alcanzable desde self , i puerto de self que lo conecta a este dipositivo
-                    value_next = 0
-                    for j in range(0, len(next_self.ports)):        # buscando el valor que tiene el otro dispositivo en receive
-                        if next_self.ports[j] == self:               # j puerto que conecta al dispositivo con self
-                            value_next = next_self.value_receive[j] 
-                    """
-
+                   
 
 class Host(Device):             # estructura host
     def __init__(self,name):
